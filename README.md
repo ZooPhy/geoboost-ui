@@ -1,12 +1,12 @@
 ## GeoBoost2: Finding Locations of Infected Hosts for Phylogeography and Epidemiology
 
-Web Interface for [GeoBoost2](https://zodo.asu.edu/zodo/). The Web Services are available [here](https://github.com/zoophy/geoboost2).
+Web Interface for [GeoBoost2](https://zodo.asu.edu/geoboost2/). The Web Services are available [here](https://github.com/zoophy/geoboost2).
 
 ### Dependencies:
 
 * [NodeJS 7.10.x](https://nodejs.org/en/)
 * [npm 5.8.x](https://www.npmjs.com/)
-* [Latest GeoBoost2 Services](https://github.com/zoophy/zodo-nlp-services)
+* [Latest GeoBoost2 Services](https://github.com/zoophy/geoboost2)
 * Your Favorite Text Editor, [VS Code](https://code.visualstudio.com/) is full featured NodeJS IDE. 
 
 ### Setup:
