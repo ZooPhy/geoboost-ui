@@ -1,0 +1,116 @@
+<div id="gbinput">
+  <div id="extract-options" class="row text-center minpadding" align="center">
+    <div class="form-group col-md-8 selpadding" ng-init="initFields()">
+      <textarea class="form-control textarea-control" id="inptext" ng-model="inpText"
+      rows=3 placeholder="input comma/newline separated GenBank accession ids">
+      </textarea>
+    </div>
+    <div class="col-md-4" >
+      <div class="row selpadding">
+        <div class="col-md-4 btn btn-default" data-toggle="collapse" data-target="#options"><label class="minpadding"><i class="fa fa-sliders" aria-hidden="true"></i></label></div>
+        <div class="col-md-6"><button id="extract-btn" type="submit" class="btn btn-success defbtnpadding" ng-click="extract();" >Extract</button></div>
+      </div>
+      <div ng-show="processing" class="row selpadding">
+        <h4 class="col-md-2 selpadding"><i class="fa fa-spinner fa-spin" style="color:royalblue"></i></h4>
+        <span class="col-md-4 selpadding" id="seconds"></span>
+      </div>
+    </div>
+  </div>
+  <div id="options" class="row pushed-down collapse minpadding">
+    <div class="col-md-2 selpadding" ng-show="inpType == 1">
+      <label>Preferred Sufficiency Level<span class="help" data-toggle="tooltip" data-placement="top" 
+        title="The Geonames feature code/administrative level which loosely determines the geographic granularity to be considered sufficient for a phylogeographic/epidemiological analysis. See http://www.geonames.org/export/codes.html for class definitions.
+        For example: In the USA, states are ADM1, counties are ADM2, and cities are generally at the PPL levels (PPLA, PPLC)."> 
+        <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+      </label>
+    </div>
+    <div class="col-md-3">
+      <select class="form-control" ng-model="selSuffLevel" ng-options="l as l for l in sufficiencyLevels"></select>
+    </div>
+    <div class="col-md-3 selpadding" ng-show="inpType == 1">
+      <label>Max Locations per record<span class="help" data-toggle="tooltip" data-placement="top" 
+        title="For every GenBank accession without sufficient location information available, you can choose to limit the number of possible locations determined by heuristics.
+        For example: If set to 10, only the top 10 locations are returned per accession based on internal heuristics.">
+        <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+      </label>
+    </div>
+    <div class="col-md-3">
+      <select class="form-control" ng-model="selMaxPossLocations" ng-options="l as l for l in maxPossibleLocations"></select>
+    </div>
+  </div>
+  <div id="extract-errors" class="hidden error"><h6 id="error-msg" class="text-center">{{ errorMsg }}</h6></div>
+  <div id="extract-results" class="hidden">
+    <!-- <div class="col-md-1">
+      <button id="export-btn" type="submit" class="btn btn-success" ng-click="export();" >Extract</button>
+    </div> -->
+
+    <div class="row minpadding">
+      <h6 id="extract-msg" class="text-center" ng-bind-html="extractMsg|trustAsHtml"></h6>
+      <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Export <span class="caret"></span></button>
+              <!-- <a href="#" class="dropdown-toggle defbtnpadding" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Export <span class="caret"></span></a> -->
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <!-- <li><input id="toolbar-button" type="button" class="btn" ng-click="downloadFormat = 'csv'" value="CSV" data-toggle="modal" data-target="#exportModel"/></li>
+                <li><input id="toolbar-button" type="button" class="btn" ng-click="downloadFormat = 'fasta'" value="FASTA" csv-header="['Field A', 'Field B', 'Field C']" data-toggle="modal" data-target="#exportModel"/></li> -->
+                <li><a href="#" lazy_load=True ng-csv="exportResults(1, true)" value="CSV" filename="zodo_data.csv" field-separator=",">CSV</a></li>
+                <li><a href="#" lazy_load=True ng-csv="exportResults(2, true)" value="TSV" filename="zodo_data.tsv" field-separator="\t">TSV</a></li>
+                <li><a href="#" ng-click="exportJson()" value="JSON" data-toggle="modal" data-target="#exportModel">JSON</a></li>
+                <!-- <li><input type="button" class="btn btn-default defbtnpadding" lazy_load=True ng-csv="exportResults(1, true)" value="CSV" filename="zodo_data.csv" field-separator=","/></li>
+                <li><input type="button" class="btn btn-default defbtnpadding" lazy_load=True ng-csv="exportResults(2, true)" value="TSV" filename="zodo_data.tsv" field-separator="\t"/></li>
+                <li><input type="button" class="btn btn-default defbtnpadding" ng-click="exportJson()" value="JSON" data-toggle="modal" data-target="#exportModel"/></li> -->
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div style="height: 600px">
+        <table class="table table-striped table-hover table-condensed table-responsive fixed_header">
+          <thead>
+            <tr>
+              <th style="width: 15%" ng-show="showColumn('gbid')">GenBankID
+                <span class="help" data-toggle="tooltip" data-placement="top" 
+                title="The rows display the GenBank Accession Identifiers. They are followed by an icon indicating if geographical locations extracted from the location related metadata fields (country, lat_lon) have been found to be sufficient at the requested level.">
+                <!-- <i ng-show="showColumn('gbid')" ng-class="r.sufficient?'fa fa-check':'fa fa-times'" ng-style="r.sufficient && {'color':'green'} || {'color':'royalblue'}"></i> -->
+                <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+              </th>
+              <th style="width: 30%" ng-show="showColumn('gbloc')">Metadata Locations
+                <span class="help" data-toggle="tooltip" data-placement="top" 
+                title="Rows display normalized locations extracted from GenBank metadata fields. Red shows locations extracted from country/lat_lon. Blue shows locations extracted from Organism, Isolate and Strain. Hover for more information.">
+                <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+              </th>
+              <th style="width: 30%" ng-show="showColumn('pmid')">PubMedID
+                <span class="help" data-toggle="tooltip" data-placement="top" title="Rows display PubMed IDs requested.">
+                <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+              </th>
+              <th style="width: 30%" ng-show="showColumn('text')">Text</th>
+              <!-- <th class="col-sm-1" ng-show="showColumn('sufficient')">Sufficient</th> -->
+              <th style="width: 30%" ng-show="showColumn('pmids')">PubMedID(s)
+                <span class="help" data-toggle="tooltip" data-placement="top" 
+                title="Rows display PubMed Ids mentioned in the GenBank metadata. Externally linked PubMed Ids (if any) are shown inside parentheses.">
+                <i class="fa fa-question-circle" aria-hidden="true"></i></span>
+              </th>
+              <th style="width: 70%" ng-show="showColumn('pubmedlocs')">Locations in PubMed/PMC-OA</th>
+              <th style="width: 70%" ng-show="showColumn('context')">Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="r in results" ng-click="LoadDetails(r);"> <!--  popover="Something Something"  popover-trigger="mouseenter" -->
+              <td style="width: 15%" class="no-wrap" ng-show="showColumn('gbid')"><a href="https://www.ncbi.nlm.nih.gov/nuccore/{{r.accid}}" target="_blank">{{ r.accid }}</a> <span><i ng-show="showColumn('gbid')" ng-class="r.sufficient?'fa fa-check':'fa fa-times'" ng-style="r.sufficient && {'color':'green'} || {'color':'royalblue'}"></i></span></td>
+              <td style="width: 30%" class="no-wrap" ng-show="showColumn('gbloc')" ng-bind-html="r.metadatalocs|trustAsHtml"></td>
+              <!-- <td class="no-wrap" ng-show="showColumn('gbloc')"><a href="https://www.geonames.org/{{r.loc.GeonameId}}/earth.html" target="_blank">{{ r.country }}</a></td> -->
+              <td style="width: 20%" class="no-wrap" ng-show="showColumn('text')"><a href="https://www.geonames.org/{{r.loc.GeonameId}}/earth.html" target="_blank">{{ r.span.text }}</a></td>
+              <!-- <td class="no-wrap" ng-show="showColumn('sufficient')"><span><i ng-class="r.sufficient?'fa fa-check':'fa fa-times'" ng-style="r.sufficient && {'color':'green'} || {'color':'royalblue'}"></i></span></td> -->
+              <td style="width: 20%" class="no-wrap" ng-show="showColumn('pmid')"><a href="https://www.ncbi.nlm.nih.gov/pubmed/{{r.pmid}}" target="_blank">{{ r.pmid }}</a></td>
+              <td style="width: 30%" ng-show="showColumn('pmids')" ng-bind-html="r.pmids|trustAsHtml"></td>
+              <td style="width: 80%" class="no-wrap" ng-show="showColumn('pubmedlocs')" ng-bind-html="r.pubmedlocs|trustAsHtml"></td>
+              <td style="width: 80%" class="no-wrap" ng-show="showColumn('context')" ng-bind-html="r.context|trustAsHtml"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

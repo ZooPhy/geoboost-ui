@@ -1,0 +1,57 @@
+{
+  "name": "geoboost2",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Finding Locations of Infected Hosts for Phylogeography and Epidemiology",
+  "keywords": [
+    "GeoBoost2",
+    "Phylogeography",
+    "Epidemiology",
+    "Natural Language Processing",
+    "Deep Learning",
+    "Metadata Enrichment",
+    "GenBank",
+    "ASU",
+    "Biodesign",
+    "CEHE"
+  ],
+  "homepage": "https://zodo.asu.edu/geoboost2/",
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "./node_modules/istanbul/lib/cli.js cover -x **/secret_settings.js ./node_modules/mocha/bin/_mocha"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-redis": "^3.4.2",
+    "cookie-parser": "~1.4.3",
+    "ejs": "^2.7.4",
+    "express": "^4.17.1",
+    "express-session": "^1.14.0",
+    "fs": "0.0.1-security",
+    "ioredis": "^2.5.0",
+    "morgan": "^1.9.1",
+    "multer": "^1.3.0",
+    "request": "^2.88.0",
+    "tiny-json-http": "^7.1.2",
+    "uuid": "^3.4.0",
+    "winston": "^2.4.4"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/amagge/geoboost2-ui"
+  },
+  "license": "Apache 2.0",
+  "author": {
+    "name": "ASU Biodesign Center for Environmental Security's ZooPhy Lab",
+    "email": "zoophylab@gmail.com",
+    "url": "http://zodo.asu.edu/geoboost2"
+  },
+  "contributors": [
+    {
+      "name": "Arjun Magge"
+    }
+  ]
+}

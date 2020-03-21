@@ -1,0 +1,183 @@
+body {
+  background-color: #fcfcfc;
+  color: #263238;
+}
+
+.title {
+  display: inline-block;
+}
+
+a, a:hover, a:active, a:visited {
+  color: rgb(46, 154, 254);
+  text-decoration: none !important;
+}
+
+label {
+  display: block;
+}
+
+.date-select {
+    max-width: 8rem;
+}
+
+.pushed-down {
+  margin-top: 2rem;
+}
+
+.geolocmap {
+  margin-left: 0rem;
+  margin-right: 0rem;
+}
+
+.panel-info {
+  background-color: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+.search-button {
+  margin-right: 3rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.nopadding {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.detail-panel-padding {
+  padding: 3px !important;
+  margin: 0 !important;
+}
+
+@media(min-width:767px) {
+  /* Small and Up */
+  #main-logo {
+    height: 5rem;
+    margin-left: 0rem;
+    margin-right: 0rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+  }
+  .navbar-nav.navbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+  }
+}
+
+@media(max-width:767px) {
+  /* XS Only */
+  #main-logo {
+      height: 7rem;
+      margin-left: 4rem;
+  }
+}
+
+#results-table {
+  font-size: 1.1rem;
+}
+
+.selected {
+  background-color: #d9edf7 !important;
+}
+
+.pdmo9-label {
+  display: inline;
+}
+
+.results-link {
+  margin-left: 3rem;
+}
+
+#data-upload {
+  display: none;
+}
+
+.help {
+  cursor: pointer; 
+  cursor: hand;
+  color: rgb(38, 50, 56) !important;
+}
+
+.help-info {
+   cursor: help;
+}
+
+.sampleBox {
+  display: inline;
+  max-width: 7.5rem;
+  min-width: 5rem;
+}
+
+h6{
+  padding-bottom: 6px;
+  padding-right: 10px;
+  margin: 0px;
+}
+
+.heatmap {
+  width:100%;
+} 
+
+.geolocmap {
+  margin-left: 0rem;
+  margin-right: 0rem;
+}
+
+#results-table {
+  font-size: 1.2rem;
+  float: left;
+  width: 61%;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+#detail-panel {
+  width: 38%;
+  padding-left: 6px;
+  padding-right: 2px;
+  margin-right: 4px;
+  float:right;
+}
+
+#detailed-view {
+  font-size: 1.25rem;
+}
+
+.borderless {
+    border: none;
+}
+
+#info {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  z-index: 100;
+}
+.tooltip.in {
+  opacity: 1;
+}
+.tooltip.top .tooltip-arrow {
+  border-top-color: white;
+}
+.tooltip-inner {
+  border: 2px solid white;
+}
+
+.checkboxcl {
+  margin: 1px 0px 0px 0px !important;
+}
+
+.top10 { 
+  margin-top:10px;
+}
+
+.large-text {
+  max-height:400px;
+}

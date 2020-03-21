@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ZoDo" >
+  <head>
+    <%- include('header'); %>
+    <title>GeoBoost2</title>
+    <script type="text/javascript" src="javascripts/home.js"></script>
+  </head>
+  <body ng-app="ZoDo" ng-controller="homeController" ng-cloak>
+    <div id="geolocmap" class="geolocmap"></div><div id="info"></div>
+    <div class="leftcontainer">
+      <nav class="navbar navbar-default blueborder" role="navigation">
+        <div class="navcontainer">
+                <ul class="nav navbar-nav">
+                    <li><a href="/" class="minpadding"><img id="main-logo" class="img-rounded img-responsive" src="images/favicon.png"/></a></li>
+                    <li><a href="#" class="nopadding"><h5><b>Finding Locations of Infected Hosts in GenBank <br> for Phylogeography and Epidemiology</b><span style="color:red" title="This website is under development. Please report bugs to the developer."><i> beta</i></span></h5>
+                        </a>
+                    </li>
+                </ul>
+              <!-- <ul class="nav navbar-nav navbar-center">
+                <li><a href="#">Center</a></li>
+              </ul> -->
+              <ul class="nav navbar-nav navbar-right about minpadding">
+                  <li><a class="btn btn-default selpadding" href="/aboutzodo" target="_new">About GB2</a></li>
+              </ul>
+        </div>
+      </nav>
+      <div class="navbar navbar-default rounded blueborder" style="max-height: 90%">
+        <!-- <div class="row rounded inp-control minpadding">
+          <div class="col-md-3 selpadding">Select Input Type</div>
+          <div class="btn-group-LG">
+            <button id="gbinput" type="submit" class="btn btn-info" ng-class="{'active': inpType == 1}" ng-click="setinput(1);" >GenBank Ids</button>
+            <button id="pminput" type="submit" class="btn btn-info" ng-class="{'active': inpType == 2}" ng-click="setinput(2);" >PubMed/PMC Ids</button>
+            <button id="textinput" type="submit" class="btn btn-info"  ng-class="{'active': inpType == 3}" ng-click="setinput(3);" >Raw Text</button>
+          </div>
+        </div> -->
+        <!-- <div class="row"><span>&nbsp;</span></div> -->
+        <div class="row selpadding" style="max-height: 90%">
+          <%- include('tgb'); %>
+        </div>
+      </div>
+    </div>
+    <div id="detail-panel" class="detailcontainer navbar navbar-default" ng-show="showDetail">
+      <div class="row minpadding">
+        <h4 class="col-md-8" ng-show="inpType==1"><b>Genbank ID: {{selectedRecord.accid}} </b></h4>
+        <button type="button" class="close col-md-1" aria-label="Close" ng-click="closeDetail();"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="detailtable">
+        <table id="detailed-view-table" class="table-condensed" border="0" style="width: 100%">
+          <tbody class="borderless">
+            <tr ng-repeat="r in selectedRecord.pubmed_summaries">
+              <td class="no-wrap" ng-bind-html="r.summary|trustAsHtml"></td> 
+              <!-- <b>PubMed ID:</b>{{r.pmid}}<br>{{r.summary}} -->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="legendcontainer navbar navbar-default pull-right blueborder" ng-show="inpType == 1">
+        <table id="legend-table" class="table-condensed" border="0">
+        <tbody class="borderless">
+          <tr>
+            <!-- <td><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+            <td><input id="probThreshold" name="probThreshold" type="range" ng-model="probThreshold" min="0" max="100" step="1" value="50" data-toggle="tooltip" data-placement="top" title="Probability Threshold"></input></td>
+            <td><span id="probThrVal">50%</span></td> -->
+          </tr>
+          <tr ng-show="showLocType('best')"><td><i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color:green"></i><b> Best location at preferred sufficiency level</b></td></tr>
+          <tr ng-show="showLocType('country')"><td><i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color:red"></i><b> Location in <i>country</i> field</b></td></tr>
+          <tr ng-show="showLocType('latlon')"><td><i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color:darkred"></i><b> Location in <i>lat_lon</i> field</b></td></tr>
+          <tr ng-show="showLocType('strain')"><td><i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color:blue"></i><b> Location in other metadata</b></td></tr>
+          <tr ng-show="showLocType('poss')"><td><i class="fa fa-map-marker fa-lg" aria-hidden="true" style="color:black"></i><b> All possible locations</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <span class="text-center navbar navbar-default contactcontainer nopadding">Please send questions, concerns and feedback to <a href="mailto:amagge@asu.edu">amagge@asu.edu</a></span>
+  </body>
+</html>
+
+<!--
+Copyright 2017 ASU Biodesign Center for Environmental Health Engineerings's ZooPhy Lab
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
