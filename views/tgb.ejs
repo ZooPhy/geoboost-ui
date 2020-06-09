@@ -7,8 +7,8 @@
     </div>
     <div class="col-md-4" >
       <div class="row selpadding">
-        <div class="col-md-4 btn btn-default" data-toggle="collapse" data-target="#options"><label class="minpadding"><i class="fa fa-sliders" aria-hidden="true"></i></label></div>
-        <div class="col-md-6"><button id="extract-btn" type="submit" class="btn btn-success defbtnpadding" ng-click="extract();" >Extract</button></div>
+        <div class="col-md-4 btn btn-default" data-toggle="collapse" data-target="#options" title="Advanced Options"><label class="minpadding"><i class="fa fa-sliders" aria-hidden="true"></i></label></div>
+        <div class="col-md-6"><button id="extract-btn" type="submit" class="btn btn-success defbtnpadding" ng-click="extract();" title="Extract LOIH">Extract</button></div>
       </div>
       <div ng-show="processing" class="row selpadding">
         <h4 class="col-md-2 selpadding"><i class="fa fa-spinner fa-spin" style="color:royalblue"></i></h4>
@@ -20,7 +20,7 @@
     <div class="col-md-2 selpadding" ng-show="inpType == 1">
       <label>Preferred Sufficiency Level<span class="help" data-toggle="tooltip" data-placement="top" 
         title="The Geonames feature code/administrative level which loosely determines the geographic granularity to be considered sufficient for a phylogeographic/epidemiological analysis. See http://www.geonames.org/export/codes.html for class definitions.
-        For example: In the USA, states are ADM1, counties are ADM2, and cities are generally at the PPL levels (PPLA, PPLC)."> 
+        For example: In the USA, states are ADM1, counties are ADM2, and cities/towns are generally coded at the ADM3 or PPL levels (PPLA, PPLC)."> 
         <i class="fa fa-question-circle" aria-hidden="true"></i></span>
       </label>
     </div>

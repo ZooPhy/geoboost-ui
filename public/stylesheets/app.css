@@ -65,6 +65,7 @@ html, body {
 .detailtable{
   min-height:50%;
   max-height:90%;
+  width: 98%;
   position:absolute;
   overflow: scroll;
 }
@@ -202,4 +203,39 @@ width: 200px;
 
 .error{
   color: red;
+}
+
+.collapsible {
+  background-color: skyblue;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 13px;
+}
+
+.active, .collapsible:hover {
+  background-color:lightskyblue;
+}
+
+.content {
+  padding: 0 5px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
 }

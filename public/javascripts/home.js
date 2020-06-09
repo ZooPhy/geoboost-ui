@@ -290,9 +290,12 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
           pmobj = pmobjs[j];
           pmlocs = pmobj.pmlocs;
           summary = $scope.getEmbText(pmlocs, pmobj.raw_text).summary;
-          title = "<h5><b>"+"PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+pmobj.pmid+"\" target=\"_blank\">"+pmobj.pmid+"</a>";
-          title += "</b> ("+ (pmobj.open_access ? "Article(OA)" : "Abstract") + " Summary)</h5></br>";
-          summary = summary == "" ? "<span style=\"color:red\"><i>" + "NO LOCATIONS FOUND" + "</i></span>" : summary;
+          if (pmobj.open_access)
+            title = "<button type=\"button\" class=\"collapsible\">"+"<b>PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/"+pmobj.pmid+"\" target=\"_blank\">"+pmobj.pmid+"</a>";
+          else
+            title = "<button type=\"button\" class=\"collapsible\">"+"<b>PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+pmobj.pmid+"\" target=\"_blank\">"+pmobj.pmid+"</a>";
+          title += "</b> ("+ (pmobj.open_access ? "Article(OA)" : "Abstract") + " Summary)</button>";
+          summary = summary == "" ? "<div class=\"content\"><span style=\"color:red\"><i>" + "NO LOCATIONS FOUND" + "</i></span></div>" : "<div class=\"content\">"+summary+"</div>";
           pubmed_summaries.push({"pmid":pmobj.pmid, "summary":title+summary});
         }
         result.pubmed_summaries = pubmed_summaries;
@@ -310,20 +313,15 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         if(result.pmlocs.length > 0){
           text = $scope.getEmbLocs(result.pmlocs);
           result.pubmedlocs = text;
-          // $scope.printObject(result.pmlocs);
-          summary = $scope.getEmbText(result.pmlocs, result.raw_text).full_text;
-          title = "<h5><b>"+"PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.pmid+"\" target=\"_blank\">"+result.pmid+"</a>";
-          title += "</b> ("+ (result.open_access ? "Article" : "Abstract") + " Summary)</h5></br>";
-          summary = summary == "" ? "<span style=\"color:red\"><i>" + "NO LOCATIONS FOUND" + "</i></span>" : summary;
-          pubmed_summaries.push({"pmid":result.pmid, "summary":title+summary});
-        } else {
-          result.pubmedlocs = "<span style=\"color:red\"><i>" + "NO LOCATIONS FOUND" + "</i></span>"
-          summary = $scope.getEmbText(result.pmlocs, result.raw_text).full_text;
-          title = "<h5><b>"+"PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.pmid+"\" target=\"_blank\">"+result.pmid+"</a>";
-          title += "</b> ("+ (result.open_access ? "Article" : "Abstract") + ")</h5></br>";
-          summary = summary == "" ? "<span style=\"color:red\"><i>" + "NO LOCATIONS FOUND" + "</i></span>" : summary;
-          pubmed_summaries.push({"pmid":result.pmid, "summary":title+summary});
         }
+        summary = $scope.getEmbText(result.pmlocs, result.raw_text).full_text;
+        if (result.open_access)
+          title = "<h5><b>"+"PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/"+result.pmid+"\" target=\"_blank\">"+result.pmid+"</a>";
+        else
+          title = "<h5><b>"+"PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.pmid+"\" target=\"_blank\">"+result.pmid+"</a>";
+        title += "</b> ("+ (result.open_access ? "Article" : "Abstract") + " Summary)</h5></br>";
+        summary = summary == "" ? "<span style=\"color:red\"><i>" + "NO LOCATIONS FOUND" + "</i></span>" : summary;
+        pubmed_summaries.push({"pmid":result.pmid, "summary":title+summary});
         result.pubmed_summaries = pubmed_summaries;
         new_results.push(result);
       }
@@ -347,6 +345,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
     if($scope.geoLocMap == null){
       initMap();
     }
+    // activateCollapsibles();
   }
 
   $scope.getEmbPubmedIds = function(result) {
@@ -354,12 +353,23 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
     if (result.pmid){
       text += "<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.pmid+"\" target=\"_blank\">"+result.pmid+"</a>";
     }
-    if (result.linked_pmids.length > 0){
+    join = false;
+    if (result.pmobjs.length > 1){
       text += " (";
-      for (var i=0;i<result.linked_pmids.length; i++){
-        if (i != 0)
-          text += ", "
-        text += "<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.linked_pmids[i]+"\" target=\"_blank\">"+result.linked_pmids[i]+"</a>";
+      for (var i=0;i<result.pmobjs.length; i++){
+        if (result.pmobjs[i].pmid == result.pmid) 
+          continue 
+        if (join == true) {
+          text += ", ";
+        } else {
+          join = true;
+        }
+        console.log(result.pmobjs[i].open_access);
+        if (result.pmobjs[i].open_access == true) {
+          text += "<a href=\"https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/"+result.pmobjs[i].pmid+"\" target=\"_blank\">"+result.pmobjs[i].pmid+"</a>";
+        } else {
+          text += "<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.pmobjs[i].pmid+"\" target=\"_blank\">"+result.pmobjs[i].pmid+"</a>";
+        }
       }
       text += ")";
     }
@@ -492,7 +502,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
     // Accession, PMC_IDs, Sufficient, Record, Unprocessed_PMCIDS, Text, Table, Final_Location, Lat/Lng, GeonameID
     // Columns in summary file are
     // Accession, GeonameID, Location_text, Confidence, Lat, Long, Feature_CODE, Country_Code, Geoname_Norm_Confidence
-    console.log("Exporting " + $scope.results.lenth + " records")
+    console.log("Exporting " + $scope.results.length + " records")
     exportedRows = []
     if ($scope.inpType == 1){
       if(header==true){
@@ -500,6 +510,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         row = {
           "Accession":"Accession",
           "Sufficient":"Sufficient",
+          "PubMedId":"PubMedId",
           "GeonameId":"GeonameId",
           "Location":"Location",
           "Code":"Code",
@@ -512,21 +523,32 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
       }
       for (i=0;i<$scope.results.length; i++){
         result = $scope.results[i];
-        // if (result.sufficient === false)
-        for (j=0;j<result.poss_locs.length; j++){
-          pmloc = result.poss_locs[j]
-          row = {
-            "Accession": result.accid,
-            "Sufficient": pmloc.Sufficient,
-            "GeonameId": pmloc.GeonameId,
-            "Location": $scope.formatName(pmloc),
-            "Code": pmloc.Code,
-            "Class": pmloc.Class,
-            "Latitude": pmloc.Latitude,
-            "Longitude": pmloc.Longitude,
-            "Probability": pmloc.Probability
+        console.log("Exporting " + i + " " + result.accid)
+        var pmids = "";
+        for (var k=0;k<result.pmobjs.length; k++){ 
+          pmids += (k>0)?", ":"";
+          pmids += result.pmobjs[k].pmid+" ("+(result.pmobjs[k].open_access?"OA":"Abstract")+")";
+        }
+        if (result.poss_locs.length > 0) {
+          for (j=0;j<result.poss_locs.length; j++){
+            pmloc = result.poss_locs[j]
+            row = {
+              "Accession": result.accid,
+              "Sufficient": pmloc.Sufficient,
+              "PubMedId": pmids,
+              "GeonameId": pmloc.GeonameId,
+              "Location": $scope.formatName(pmloc),
+              "Code": pmloc.Code,
+              "Class": pmloc.Class,
+              "Latitude": pmloc.Latitude,
+              "Longitude": pmloc.Longitude,
+              "Probability": pmloc.Probability
+            }
+            exportedRows.push(row);
+            console.log("Added " + exportedRows.length)
           }
-          exportedRows.push(row);
+        } else {
+          console.log("No result for record: " + result.accid)
         }
       }
     } else if ($scope.inpType == 2) {
@@ -569,6 +591,10 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
     } else {
       $scope.showDetail = false;
     }
+    setTimeout(function() {
+      console.log('after timeout');
+      activateCollapsibles();
+    }, 200);
   };
 
   // Click handlers
@@ -730,6 +756,26 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         }
       }
     });
+  }
+
+  function activateCollapsibles() {
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+    console.log("Activating collapsibles " + coll.length);
+    for (i = 0; i < coll.length; i++) {
+      console.log("Adding listener");
+      coll[i].addEventListener("click", function() {
+        console.log("Clicked");
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        console.log("Show ");
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
   }
 
   // Map Stuff
