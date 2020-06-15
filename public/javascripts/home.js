@@ -129,6 +129,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
       $scope.inpType = 1;
       $scope.inpText = "KU497555, KY441403, MF073357, MF073358, KY558999, KY559001, KY559003, KY559004, KY559005, KY559006, KY559007, KY559009";
       // $scope.inpText = "GQ457496, KU497555, AB110657, AB110658, KM078979, AB570999, AB559889, KJ579442, KF383121, KY042039, AB570996, AB570997, KF383041, AB433853, AB559916";
+      // $scope.inpText = "JN802579,JN802580,JN802588,JN802591"
     } else if (inputtype == 2){
       $scope.inpType = 2;
       // $scope.inpText = "PMC2570840";
@@ -210,7 +211,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         $scope.processing = false;
       })
       .catch(function (response) {
-        console.log(response.status)
+        console.log("GenBank response: ", response.status);
         $scope.processing = false;
         if (response.status === 500) {
           $scope.errorMsg = "Kindly try again. If the problem persists, please contact amagge@asu.edu.";
@@ -465,9 +466,11 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
     summary = []
     for (j=0;j<ents.length; j++){
       ent = ents[j].span;
+      type = "Geographic Location";
+      prob = ents[j].probability;
       // Embed full text
       full_emb_text = full_emb_text.substring(0, ent.start) + 
-      "<span style=\"color:blue\" title=\"Type : Geographic Location\">" + full_emb_text.substring(ent.start, ent.end) + "</span>" +
+      "<span style=\"color:blue\" title=\"Type: " + type + ", Entity Probability:" + prob + "\">" + full_emb_text.substring(ent.start, ent.end) + "</span>" +
       full_emb_text.substring(ent.end);
       // Now embed sentences for summary
       if (ent.sent_start == prev_index){
@@ -480,7 +483,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         sent = text.substring(ent.sent_start, ent.sent_end);
       }
       sent = sent.substring(0, ent.start-ent.sent_start) + 
-              "<span style=\"color:blue\" title=\"Type : Geographic Location\">" + sent.substring(ent.start-ent.sent_start, ent.end-ent.sent_start) + "</span>" +
+              "<span style=\"color:blue\" title=\"Type: " + type + ", Entity Probability:" + prob + "\">" + sent.substring(ent.start-ent.sent_start, ent.end-ent.sent_start) + "</span>" +
               sent.substring(ent.end-ent.sent_start);
       prev_sent = sent;  
       prev_index = ent.sent_start;
@@ -510,7 +513,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         row = {
           "Accession":"Accession",
           "Sufficient":"Sufficient",
-          "PubMedId":"PubMedId",
+          "PubMedIDs":"PubMedIDs",
           "GeonameId":"GeonameId",
           "Location":"Location",
           "Code":"Code",
@@ -523,7 +526,6 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
       }
       for (i=0;i<$scope.results.length; i++){
         result = $scope.results[i];
-        console.log("Exporting " + i + " " + result.accid)
         var pmids = "";
         for (var k=0;k<result.pmobjs.length; k++){ 
           pmids += (k>0)?", ":"";
@@ -535,7 +537,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
             row = {
               "Accession": result.accid,
               "Sufficient": pmloc.Sufficient,
-              "PubMedId": pmids,
+              "PubMedIDs": pmids,
               "GeonameId": pmloc.GeonameId,
               "Location": $scope.formatName(pmloc),
               "Code": pmloc.Code,
@@ -545,7 +547,6 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
               "Probability": pmloc.Probability
             }
             exportedRows.push(row);
-            console.log("Added " + exportedRows.length)
           }
         } else {
           console.log("No result for record: " + result.accid)
@@ -592,7 +593,6 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
       $scope.showDetail = false;
     }
     setTimeout(function() {
-      console.log('after timeout');
       activateCollapsibles();
     }, 200);
   };
@@ -761,14 +761,10 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
   function activateCollapsibles() {
     var coll = document.getElementsByClassName("collapsible");
     var i;
-    console.log("Activating collapsibles " + coll.length);
     for (i = 0; i < coll.length; i++) {
-      console.log("Adding listener");
       coll[i].addEventListener("click", function() {
-        console.log("Clicked");
         this.classList.toggle("active");
         var content = this.nextElementSibling;
-        console.log("Show ");
         if (content.style.display === "block") {
           content.style.display = "none";
         } else {
