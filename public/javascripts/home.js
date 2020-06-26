@@ -200,7 +200,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
       var uriparams = 'text=' + ids + '&suff=' + $scope.selSuffLevel + '&maxlocs=' + $scope.selMaxPossLocations;
       //uriparams = encodeURIComponent(uriparams);
       var uri = getServer()+'/accession?'+uriparams;
-      console.log('Public:'+uri);
+      // console.log('Public:'+uri);
       $scope.lookupResults = [];
       $http.get(uri).then(function(response) {
         if (response.status === 200) {
@@ -211,7 +211,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         $scope.processing = false;
       })
       .catch(function (response) {
-        console.log("GenBank response: ", response.status);
+        // console.log("GenBank response: ", response.status);
         $scope.processing = false;
         if (response.status === 500) {
           $scope.errorMsg = "Kindly try again. If the problem persists, please contact amagge@asu.edu.";
@@ -227,7 +227,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
       var uriparams = 'text=' + ids;
       //uriparams = encodeURIComponent(uriparams);
       var uri = getServer()+'/pubmed?'+uriparams;
-      console.log('Public:'+uri);
+      // console.log('Public:'+uri);
       $scope.lookupResults = [];
       $http.get(uri).then(function(response) {
         if (response.status === 200) {
@@ -252,7 +252,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
     inpText = inpText.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"');
     var postdata = {"text" : inpText.trim()};
     var uri = getServer()+'/resolve';
-    console.log('Public: '+uri);
+    // console.log('Public: '+uri);
     $scope.extractResults = [];
     $http.post(uri, postdata).then(function(response) {
       if (response.status === 200) {
@@ -365,7 +365,6 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         } else {
           join = true;
         }
-        console.log(result.pmobjs[i].open_access);
         if (result.pmobjs[i].open_access == true) {
           text += "<a href=\"https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/"+result.pmobjs[i].pmid+"\" target=\"_blank\">"+result.pmobjs[i].pmid+"</a>";
         } else {
