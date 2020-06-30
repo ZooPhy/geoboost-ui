@@ -291,11 +291,12 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
           pmobj = pmobjs[j];
           pmlocs = pmobj.pmlocs;
           summary = $scope.getEmbText(pmlocs, pmobj.raw_text).summary;
-          if (pmobj.open_access)
+          if (pmobj.open_access) {
             title = "<button type=\"button\" class=\"collapsible\">"+"<b>PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pmc/articles/pmid/"+pmobj.pmid+"\" target=\"_blank\">"+pmobj.pmid+"</a>";
-          else
+          } else {
             title = "<button type=\"button\" class=\"collapsible\">"+"<b>PubMed ID: "+"<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+pmobj.pmid+"\" target=\"_blank\">"+pmobj.pmid+"</a>";
-          title += "</b> ("+ (pmobj.open_access ? "Article(OA)" : "Abstract") + " Summary)</button>";
+          }
+          title += "</b> ("+ (pmobj.open_access ? "OA Article" : "Abstract") + " Summary)</button>";
           summary = summary == "" ? "<div class=\"content\"><span style=\"color:red\"><i>" + "NO LOCATIONS FOUND" + "</i></span></div>" : "<div class=\"content\">"+summary+"</div>";
           pubmed_summaries.push({"pmid":pmobj.pmid, "summary":title+summary});
         }
@@ -355,7 +356,7 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
       text += "<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.pmid+"\" target=\"_blank\">"+result.pmid+"</a>";
     }
     join = false;
-    if (result.pmobjs.length > 1){
+    if (result.pmobjs.length > 0){
       text += " (";
       for (var i=0;i<result.pmobjs.length; i++){
         if (result.pmobjs[i].pmid == result.pmid) 
@@ -372,6 +373,21 @@ angular.module('ZoDo').controller('homeController', function ($scope, $http, $ti
         }
       }
       text += ")";
+    } else {
+      if (result.linked_pmids.length > 0) {
+        text += " (";
+        for (var i=0;i<result.linked_pmids.length; i++){
+          if (result.linked_pmids[i] == result.pmid) 
+            continue 
+          if (join == true) {
+            text += ", ";
+          } else {
+            join = true;
+          }
+          text += "<a href=\"https://www.ncbi.nlm.nih.gov/pubmed/"+result.linked_pmids[i]+"\" target=\"_blank\">"+result.linked_pmids[i]+"</a>";
+        }
+        text += ")";
+      }
     }
     return text;
   }
