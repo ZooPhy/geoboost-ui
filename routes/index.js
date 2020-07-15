@@ -12,7 +12,7 @@ router.get('/', function(req, res) {
   res.status(200).render('home', {});
 });
 
-router.get('/aboutzodo', function(req, res) {
+router.get('/aboutgeoboost2', function(req, res) {
   res.status(200).render('about');
 });
 
