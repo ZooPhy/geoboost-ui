@@ -20,6 +20,14 @@ html, body {
   margin: 0 !important;
 }
 
+.logopadding {
+  padding-left: 5px !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+  padding-right: 5px !important;
+  margin: 0 !important;
+}
+
 .selpadding {
   padding: 3px !important;
   margin: 0 !important;
@@ -102,7 +110,7 @@ html, body {
 @media(min-width:567px) {
   /* Small and Up */
   #main-logo {
-    height: 2rem;
+    height: 1.5rem;
     margin-left: 0rem;
     margin-right: 0rem;
     margin-top: 0rem;

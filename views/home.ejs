@@ -11,7 +11,7 @@
       <nav class="navbar navbar-default blueborder" role="navigation">
         <div class="navcontainer">
                 <ul class="nav navbar-nav">
-                    <li><a href="/" class="minpadding"><img id="main-logo" class="img-rounded img-responsive" src="images/favicon.png"/></a></li>
+                    <li><a href="/" class="logopadding"><img id="main-logo" class="img-rounded img-responsive" src="images/favicon.png"/></a></li>
                     <li><a href="#" class="nopadding"><h5><b>Finding Locations of Infected Hosts in GenBank <br> for Phylogeography and Epidemiology</b><span style="color:red" title="This website is under development. Please report bugs to the developer."><i> beta</i></span></h5>
                         </a>
                     </li>
@@ -25,15 +25,6 @@
         </div>
       </nav>
       <div class="navbar navbar-default rounded blueborder" style="max-height: 90%">
-        <!-- <div class="row rounded inp-control minpadding">
-          <div class="col-md-3 selpadding">Select Input Type</div>
-          <div class="btn-group-LG">
-            <button id="gbinput" type="submit" class="btn btn-info" ng-class="{'active': inpType == 1}" ng-click="setinput(1);" >GenBank Ids</button>
-            <button id="pminput" type="submit" class="btn btn-info" ng-class="{'active': inpType == 2}" ng-click="setinput(2);" >PubMed/PMC Ids</button>
-            <button id="textinput" type="submit" class="btn btn-info"  ng-class="{'active': inpType == 3}" ng-click="setinput(3);" >Raw Text</button>
-          </div>
-        </div> -->
-        <!-- <div class="row"><span>&nbsp;</span></div> -->
         <div class="row selpadding" style="max-height: 90%">
           <%- include('tgb'); %>
         </div>
