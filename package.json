@@ -25,7 +25,7 @@
     "connect-redis": "^3.4.2",
     "cookie-parser": "~1.4.3",
     "ejs": "^2.7.4",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-session": "^1.14.0",
     "fs": "0.0.1-security",
     "ioredis": "^2.5.0",
